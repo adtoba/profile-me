@@ -76,13 +76,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             height: 30.0,
                           ),
-                          TextFormField(
-                            controller: _userNameController,
-                            decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.search),
-                                hintText: 'Search github profile',
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(4.0))),
+                          Form(
+                            key: _formKey,
+                            child: TextFormField(
+                              controller: _userNameController,
+                              decoration: InputDecoration(
+                                  prefixIcon: Icon(Icons.search),
+                                  hintText: 'Search github profile',
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(4.0))),
+                              validator: (String content) {
+                                if (content.length <= 0) {
+                                  return 'Field cannot be empty';
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
                           ),
                           SizedBox(
                             height: 30.0,
@@ -99,20 +110,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           GestureDetector(
                             onTap: () async {
-                              model
-                                  .getAccount(_userNameController.text)
-                                  .then((response) {
-                                if (model.status == Status.LOADED) {
-                                  Profile profile = Profile.fromJson(
-                                      json.decode(response.body));
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return ProfileScreen(profile);
-                                  }));
-                                } else {
-                                  showSnackBar(context, 'Cannot get profile');
-                                }
-                              });
+                              if (_formKey.currentState.validate()) {
+                                model
+                                    .getAccount(_userNameController.text)
+                                    .then((response) {
+                                  if (model.status == Status.LOADED) {
+                                    Profile profile = Profile.fromJson(
+                                        json.decode(response.body));
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return ProfileScreen(profile);
+                                    }));
+                                  } else {
+                                    showSnackBar(context, 'Cannot get profile');
+                                  }
+                                });
+                              }
                             },
                             child: Center(
                               child: Container(
@@ -140,6 +153,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   showSnackBar(BuildContext context, String message) {
     Scaffold.of(context).showSnackBar(SnackBar(
