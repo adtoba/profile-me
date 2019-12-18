@@ -4,40 +4,22 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:profile_me/constants/status.dart';
 import 'package:profile_me/core/models/profile.dart';
+import 'package:profile_me/core/services/api.dart';
+import 'package:profile_me/core/viewmodels/base_model.dart';
 import 'package:profile_me/locator.dart';
-import 'package:profile_me/repo/github_repo.dart';
 import 'package:provider/provider.dart';
 
+class HomeModel extends BaseModel {
+  Api _api = locator<Api>();
 
-class HomeModel extends ChangeNotifier {
+  String userEmail;
 
-  final GithubProfile _profile = locator<GithubProfile>();
-  String url;
-  Status status;
-
-  Status get myStatus => status;
-
-  Future<Response> getGithubProfile(String url) {
+  Future<Response> getAccount(String userName) async {
     setStatus(Status.LOADING);
-    var response = _profile.githubProfile(url).then((response) {
-      Map<String, dynamic> responseMap = json.decode(response.body);
-      Profile profile = Profile.fromJson(responseMap);
-      print('Response is: $responseMap');
-      print('Username: ${profile.name}');
-
-    });
-    
+    var response = await _api.getUserAccount(userName);
     setStatus(Status.LOADED);
+
     return response;
+
   }
-
-  setStatus(Status pstatus) {
-    status = pstatus;
-    notifyListeners();
-  }
-
-
-
-
-
 }

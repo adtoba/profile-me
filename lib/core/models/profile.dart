@@ -3,21 +3,23 @@ import 'package:flutter/material.dart';
 
 class Profile {
 
-  const Profile({
+   Profile({
     @required this.name,
     @required this.email,
     @required this.bio,
     @required this.followers,
     @required this.url,
-    @required this.avatarUrl
+    @required this.avatarUrl,
+    @required this.login
   });
 
-  final String name;
-  final String avatarUrl;
-  final String bio;
-  final int followers;
-  final String email;
-  final String url;
+   String name;
+   String avatarUrl;
+   String bio;
+   int followers;
+   String email;
+   String url;
+   String login;
 
   String get namee => this.name;
 
@@ -29,7 +31,8 @@ class Profile {
       bio:  jsonResponse['bio'],
       url: jsonResponse['url'],
       avatarUrl: jsonResponse['avatar_url'],
-      followers: jsonResponse['followers'] 
+      followers: jsonResponse['followers'],
+      login: jsonResponse['login']
     );
   }
 }

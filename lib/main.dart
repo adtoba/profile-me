@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:profile_me/core/viewmodels/home_model.dart';
 import 'package:profile_me/locator.dart';
-import 'package:profile_me/repo/github_repo.dart';
 import 'package:profile_me/ui/home_screen.dart';
+import 'package:profile_me/ui/profile_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
         title: 'Profile Me',
         theme: ThemeData(
+          fontFamily: 'MuseoSans',
           primarySwatch: Colors.blue,
         ),
         home: HomeScreen(),
